@@ -1,1 +1,2 @@
 mac-youtube-cli
+youtube_dl

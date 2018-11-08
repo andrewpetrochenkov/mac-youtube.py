@@ -9,7 +9,7 @@ $ [sudo] pip install mac-youtube
 ```
 
 ### Features
-`Google Chrome.app` only
++   `play()`, `pause()`, `playing()`, `urls()` works only in MacOS `Google Chrome.app`
 
 ### Examples
 ```python
@@ -22,6 +22,8 @@ $ [sudo] pip install mac-youtube
 >>> mac_youtube.pause()
 ```
 
-### Todo
-+   `mac_youtube.playing()`
-+   `mac_youtube.mute()`, `mac_youtube.muted()`, `mac_youtube.unmute()`
+download
+```python
+>>> mac_youtube.download('https://www.youtube.com/watch?v=cvaIgq5j2Q8')
+'~/Library/Caches/youtube/IzpVGLv6JoU/Nightcore - Angel With A Shotgun.mp4'
+```

