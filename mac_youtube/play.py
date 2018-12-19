@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""continue play youtube video"""
 import mac_youtube
 
 

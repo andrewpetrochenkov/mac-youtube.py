@@ -6,64 +6,109 @@ import mac_icon
 import public
 import requests
 import runcmd
-
-"""
-https://rg3.github.io/youtube-dl/
-~/Library/Caches/youtube/id/name.ext
-"""
-
-CACHES = os.path.expanduser("~/Library/Caches")
-OUTPUT_TEMPLATE = "%(title)s.%(ext)s"
+import subprocess
+import tempfile
+import youtube_dl
 
 
 @public.add
 def pause():
-    runcmd.run(["youtube", "pause"])._raise()
+    """pause youtube videos"""
+    code = """
+repeat with w in every window
+    repeat with t in every tab of w
+        if "youtube" is in (get URL of t) then
+            tell t
+                set is_playing to execute javascript "!!Array.prototype.find.call(document.querySelectorAll('audio,video'),function(elem){return elem.duration > 0 && !elem.paused})"
+                if is_playing is true then
+                    execute javascript "document.getElementsByClassName('ytp-play-button ytp-button')[0].click();"
+                end if
+            end tell
+        end if
+    end repeat
+end repeat
+"""
+    return google_chrome.tell(code)
 
 
 @public.add
 def play():
-    runcmd.run(["youtube", "play"])._raise()
-
+    """continue play youtube video"""
+    code = """
+repeat with w in every window
+    repeat with t in every tab of w
+        if "youtube" is in (get URL of t) then
+            tell t
+                set is_playing to execute javascript "!!Array.prototype.find.call(document.querySelectorAll('audio,video'),function(elem){return elem.duration > 0 && !elem.paused})"
+                if is_playing is false then
+                    execute javascript "document.getElementsByClassName('ytp-play-button ytp-button')[0].click();"
+                end if
+            end tell
+        end if
+    end repeat
+end repeat
+"""
+    return google_chrome.tell(code)
 
 @public.add
 def playing():
-    return runcmd.run(["youtube", "playing"])._raise().out.splitlines()
-
+    """return True if youtube video is playing"""
+    code = """
+repeat with w in every window
+    repeat with t in every tab of w
+        if "youtube" is in (get URL of t) then
+            tell t
+                set is_playing to execute javascript "!!Array.prototype.find.call(document.querySelectorAll('audio,video'),function(elem){return elem.duration > 0 && !elem.paused})"
+                if is_playing is true then
+                    log (get URL of t)
+                end if
+            end tell
+        end if
+    end repeat
+end repeat
+    """
+    return google_chrome.tell(code).out.splitlines()
 
 @public.add
 def urls():
+    """return list of opened youtube videos"""
     return list(filter(lambda url: "www.youtube.com/" in url, google_chrome.urls()))
 
 
 @public.add
 def id(url):
+    """return video id"""
     return url.split("/")[-1] if "=" not in url else url.split("=")[1]
 
-
-def _download_path(folder):
-    if os.path.exists(folder):
-        for l in os.listdir(folder):
-            return os.path.join(folder, l)
-
+@public.add
+def info(id):
+    """return info dictionary"""
+    url = 'https://www.youtube.com/watch?v=%s' % id
+    with youtube_dl.YoutubeDL({'quiet': True}) as ydl:
+          return ydl.extract_info(url, download=False)
 
 @public.add
-def download(url):
-    folder = os.path.join(CACHES, "youtube", id(url))
-    if _download_path(folder):
-        return _download_path(folder)
-    output = os.path.join(folder, OUTPUT_TEMPLATE)
-    url = "https://www.youtube.com/watch?v=%s" % id(url)
-    args = ["youtube-dl", "-o", "'%s'" % output, "--no-cache-dir", url]
-    code = os.system("%s 1>&2" % " ".join(args))
-    thumbnail_url = "https://img.youtube.com/vi/%s/hqdefault.jpg" % id(url)
-    thumbnail_path = "/tmp/thumbnail.jpg"
-
-    r = requests.get(thumbnail_url)
+def download_thumbnail(video):
+    """download thumbnail and return path"""
+    url = "https://www.youtube.com/watch?v=%s" % id(video)
+    info = mac_youtube.info(id(video))
+    path = tempfile.mkstemp()[1]
     with open(thumbnail_path, 'wb') as f:
         for chunk in r.iter_content(chunk_size=1024):
-            if chunk:  # filter out keep-alive new chunks
+            if chunk:
                 f.write(chunk)
-    path = _download_path(folder)
-    mac_icon.update(path, thumbnail_path)
     return path
+
+@public.add
+def download(video,dst):
+    """download youtube video and set Finder Icon"""
+    url = "https://www.youtube.com/watch?v=%s" % id(video)
+    if os.path.dirname(dst) and not os.path.exists(os.path.dirname(dst)):
+        os.makedirs(os.path.dirname(dst))
+    args = ["youtube-dl", "-o", "'%s'" % dst, "--no-cache-dir", url]
+    process = subprocess.Popen(args).communicate()
+    process.communicate()
+    out, err = process.communicate()
+    code = process.returncode
+    if code!=0:
+        raise OSError(err.decode("utf-8"))

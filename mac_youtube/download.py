@@ -1,10 +1,11 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""download youtube video and print path"""
 import click
 import mac_youtube
 
-
-PROG_NAME = 'python -m mac_youtube.download url ...'
+MODULE_NAME = "mac_youtube.download"
+PROG_NAME = 'python -m %s' % MODULE_NAME
+USAGE = 'python -m %s url ...' % MODULE_NAME
 
 
 @click.command()

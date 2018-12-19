@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""pause youtube videos"""
 import mac_youtube
 
 

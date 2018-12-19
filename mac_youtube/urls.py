@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""print youtube urls"""
 import mac_youtube
 
 
