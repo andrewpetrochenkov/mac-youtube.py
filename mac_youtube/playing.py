@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-"""print `true` if youtube video playing, else `false`"""
+"""print playing urls"""
 import mac_youtube
 
 
 def _cli():
-    playing = mac_youtube.playing()
-    if playing:
-        print("true")
+    urls = mac_youtube.playing()
+    if urls:
+        print("\n".join(urls))
 
 
 if __name__ == "__main__":

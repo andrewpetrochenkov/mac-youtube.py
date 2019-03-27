@@ -27,7 +27,7 @@ usage|`__doc__`
 `python -m mac_youtube.download url ...` |download youtube video and print path
 `python -m mac_youtube.pause` |pause youtube videos
 `python -m mac_youtube.play` |continue play youtube video
-`python -m mac_youtube.playing` |print `true` if youtube video playing, else `false`
+`python -m mac_youtube.playing` |print playing urls
 `python -m mac_youtube.urls` |print youtube urls
 
 #### Examples
