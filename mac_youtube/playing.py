@@ -4,7 +4,7 @@ import mac_youtube
 
 
 def _cli():
-    urls = mac_youtube.playing()
+    urls = mac_youtube.playing_urls()
     if urls:
         print("\n".join(urls))
 

@@ -1,5 +1,6 @@
 <!--
 https://pypi.org/project/readme-generator/
+https://pypi.org/project/python-readme-generator/
 -->
 
 [![](https://img.shields.io/badge/OS-MacOS-blue.svg?longCache=True)]()
@@ -21,7 +22,7 @@ function|`__doc__`
 `mac_youtube.id(url)` |return video id
 `mac_youtube.info(video)` |return info dictionary
 
-#### CLI
+#### Executable modules
 usage|`__doc__`
 -|-
 `python -m mac_youtube.download url ...` |download youtube video and print path
@@ -49,5 +50,5 @@ info
 ```
 
 <p align="center">
-    <a href="https://pypi.org/project/readme-generator/">readme-generator</a>
+    <a href="https://pypi.org/project/python-readme-generator/">python-readme-generator</a>
 </p>

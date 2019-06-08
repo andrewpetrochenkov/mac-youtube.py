@@ -87,8 +87,8 @@ end try
 
 
 @public.add
-def playing():
-    """return True if youtube video is playing"""
+def playing_urls():
+    """return a list of playing urls"""
     code = """
 on function()
     tell application "Google Chrome"
@@ -117,6 +117,12 @@ on error errorMessage number errorNumber
 end try
     """
     return applescript.run(code).err.splitlines()
+
+
+@public.add
+def isplaying():
+    """return True if youtube video is playing"""
+    return len(playing_urls()) > 0
 
 
 @public.add
