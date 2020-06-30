@@ -1,12 +1,11 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+__all__ = ['pause', 'play', 'playing_urls', 'isplaying', 'urls', 'id', 'info']
+
+
 import applescript
 import google_chrome
-import public
 import youtube_dl
 
 
-@public.add
 def pause():
     """pause youtube videos"""
     code = """
@@ -39,7 +38,6 @@ end try
     return applescript.run(code)
 
 
-@public.add
 def play():
     """continue play youtube video"""
     code = """
@@ -86,7 +84,6 @@ end try
     return applescript.run(code)
 
 
-@public.add
 def playing_urls():
     """return a list of playing urls"""
     code = """
@@ -119,25 +116,21 @@ end try
     return applescript.run(code).err.splitlines()
 
 
-@public.add
 def isplaying():
     """return True if youtube video is playing"""
     return len(playing_urls()) > 0
 
 
-@public.add
 def urls():
     """return a list of opened youtube videos"""
     return list(filter(lambda url: "www.youtube.com/" in url, google_chrome.urls()))
 
 
-@public.add
 def id(url):
     """return video id"""
     return url.split("/")[-1] if "=" not in url else url.split("=")[1]
 
 
-@public.add
 def info(video):
     """return info dictionary"""
     url = 'https://www.youtube.com/watch?v=%s' % id(video)
